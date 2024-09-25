@@ -1,8 +1,9 @@
 pipeline {
     agent any
     environment {
-        // Using environment variables to store credentials securely
-        DOCKERHUB_CREDENTIALS = credentials('docker-hub-credentials')
+        // Assuming 'dockerhub-username' and 'dockerhub-password' are the IDs of the credentials
+        DOCKER_USERNAME = credentials('dockerhub-username') // Loads the Docker Hub username
+        DOCKER_PASSWORD = credentials('dockerhub-password') // Loads the Docker Hub password
     }
     stages {
         stage('Build Docker Image') {
@@ -16,10 +17,10 @@ pipeline {
         stage('Push Image to Docker Hub') {
             steps {
                 script {
-                    // Logging into Docker Hub and pushing the image
-                    docker.withRegistry('https://index.docker.io/v1/', 'DOCKERHUB_CREDENTIALS') {
-                        sh "docker push abdullahdaniyal1234/your_dockerhub_repo:${env.BUILD_ID}"
-                    }
+                    // Setup for Docker Hub credentials
+                    sh 'echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin'
+                    // Pushing the Docker image
+                    sh "docker push abdullahdaniyal1234/your_dockerhub_repo:${env.BUILD_ID}"
                 }
             }
         }
