@@ -19,7 +19,7 @@ pipeline {
                 script {
                     // Setup for Docker Hub credentials
                     sh 'echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin'
-                    // Pushing the Docker image
+                    // Pushing the Docker image/
                     sh "docker push abdullahdaniyal1234/your_dockerhub_repo:${env.BUILD_ID}"
                 }
             }
